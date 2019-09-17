@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { AngularMaterialModule } from '../angular-material.module';
-import { ArticleMainComponent } from './article-main/article-main.component';
 
+import { SummaryComponent } from './summary/summary.component';
 @NgModule({
   declarations: [
-    ArticleMainComponent
+    SummaryComponent
   ],
   imports: [
     CommonModule,

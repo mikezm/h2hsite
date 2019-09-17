@@ -12,7 +12,7 @@ import { ErrorComponent } from './error/error.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ArticlesModule } from './articles/articles.module';
+import { ArticlesModule } from './article/articles.module';
 
 @NgModule({
   declarations: [

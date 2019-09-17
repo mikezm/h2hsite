@@ -3,10 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 import { AuthGuard } from './auth/auth.guard';
-import { ArticleMainComponent } from './articles/article-main/article-main.component';
+import { SummaryComponent } from './article/summary/summary.component';
 
 const routes: Routes = [
-  { path: '', component: ArticleMainComponent },
+  { path: '', component: SummaryComponent },
   //{ path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
   //{ path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthModule' }
