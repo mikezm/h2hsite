@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="row mt-4 mb-4">
+    <!--
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary">Left</button>
+      <button type="input" class="btn btn-secondary">Middle</button>
+      <button type="button" class="btn btn-secondary">Right</button>
+    </div>
+  -->
+    <div class="col-md-1 col-sm-0 col-lg-2"></div>
+    <div class="col-md-10 col-sm-12 col-lg-8">
+      <div class="d-block">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <mat-icon aria-hidden="false" aria-label="Search icon">search</mat-icon>
+            </div>
+          </div>
+          <input placeholder="search term" [(ngModel)]="articleSearchText">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <mat-icon aria-hidden="false" aria-label="Clear search icon">cancel</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-1 col-sm-0 col-lg-2"></div>
+  </div>
+
+
+  <div class="row">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <div class="col" *ngIf="articles.length>0  && !isLoading">
+      <mat-card class="article-summary" *ngFor="let article of articles | search: articleSearchText">
+        <mat-card-title>
+          <a routerLink="/article/{{ article.headline }}">{{ article.headline }}</a>
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="article.speakers && article.speakers.length>0">
+          <div *ngFor="let speaker of article.speakers">
+            <span class="speaker-name">{{ speaker.name }}</span>
+            <span class="speaker-affiliation">{{ speaker.affiliation }}</span>
+          </div>
+        </mat-card-subtitle>
+        <mat-card-subtitle *ngIf="article.date">
+          Date:
+          {{ article.date | date: 'longDate' }}
+        </mat-card-subtitle>
+        <mat-card-content *ngIf="article.info && article.info.length>0">
+          Info: {{ article.info }}
+        </mat-card-content>
+        <mat-card-footer *ngIf="article.tags && article.tags.length>0">
+          Tags: {{ article.tags }}
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </div>
+
+</div>

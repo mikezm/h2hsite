@@ -1,58 +1,86 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
-import { Article, ArticleSummary, ArticleSummaryResponse } from './article.model'
+import { map } from 'rxjs/operators';
+import { Article, ArticleSummary, ArticleResponse, ArticleSummaryReponse } from './article.model'
 import { environment } from '../../environments/environment';
 
 const BACKEND_URL = `${environment.apiUrl}/articles`;
 
 @Injectable({ providedIn: 'root' })
 export class ArticleService {
-  private articleStatusListener = new Subject<boolean>();
-  private articleSummaryStatusListener = new Subject<boolean>();
   private article: Article;
   private articleSummary: ArticleSummary[];
+  private articleUpdated = new Subject<Article>();
+  private articleSummaryUpdated = new Subject<ArticleSummary[]>();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient) { }
 
-  getArticleStatusListener() {
-    return this.articleStatusListener.asObservable();
+  private transformArticleResponse(rawData: ArticleResponse): Article {
+    return {
+      headline: rawData.headline,
+      speakers: (rawData.speakers) ? rawData.speakers.map(s => {
+        return {
+          name: s.speaker_name,
+          affiliation: s.affiliation
+        }
+      }): null,
+      date: rawData.article_date,
+      info: rawData.info,
+      tags: rawData.tags,
+      paragraphs: rawData.paragraphs
+    };
   }
 
-  getArticleSummaryStatusListener() {
-    return this.articleSummaryStatusListener.asObservable();
+  private transformArticleSummaryResponse(res: { data: ArticleSummaryReponse[] }): ArticleSummary[] {
+    const results = res.data;
+    return results.map(rawData => {
+      return {
+        headline: rawData.headline,
+        speakers: (rawData.speakers) ? rawData.speakers.map(s => {
+          return {
+            name: s.speaker_name,
+            affiliation: s.affiliation
+          }
+        }): null,
+        date: rawData.article_date,
+        info: rawData.info,
+        tags: rawData.tags
+      };
+    })
+    .sort((a,b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime()
+    });
   }
 
-  getArticleSummaryResults() {
-    return this.articleSummary;
+  getArticleUpdateListener() {
+    return this.articleUpdated.asObservable();
   }
 
-  getArticleResults() {
-    return this.article;
+  getArticleSummaryUpdateListener() {
+    return this.articleSummaryUpdated.asObservable();
   }
 
-  getArticleSummary() {
+  getArticleSummary(perPage: number, currentPage: number) {
+    //const queryParams = `?pagesize=${perPage}&page=${currentPage}`;
     return this.http
-      .get<ArticleSummaryResponse>(`${BACKEND_URL}/summary`)
-      .subscribe(response => {
-        this.articleSummary = response.data;
-        this.articleSummaryStatusListener.next(true);
-      }, error => {
-        this.articleSummaryStatusListener.next(false);
+      .get<{ data: ArticleSummaryReponse[] }>(`${BACKEND_URL}/summary`)
+      .pipe(map(this.transformArticleSummaryResponse))
+      .subscribe(transformedSummary => {
+        this.articleSummary = transformedSummary;
+        this.articleSummaryUpdated.next(this.articleSummary);
       });
   }
 
   getArticle(headline: string) {
     const body = { headline: headline }
     this.http
-      .post<Article>(`${BACKEND_URL}/article`, body)
-      .subscribe(response => {
-        this.article = response;
-        this.articleStatusListener.next(true);
-      }, error => {
-        this.articleStatusListener.next(false);
+      .post<ArticleResponse>(`${BACKEND_URL}/article`, body)
+      .pipe(map(this.transformArticleResponse))
+      .subscribe(transformedArticle => {
+        this.article = transformedArticle;
+        this.articleUpdated.next(this.article);
       });
   }
 }

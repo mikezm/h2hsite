@@ -8,6 +8,11 @@ import { Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 const BACKEND_URL = environment.apiUrl + '/user';
+const tokenRequiredRoutes = [
+  'articles/new',
+  'user/logout',
+  'user/activate'
+];
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -108,6 +113,16 @@ export class AuthService {
       }, error => {
         this.authStatusListener.next(false);
       });
+  }
+
+  urlRequiresToken(url: string) {
+    let tokenRequired = false;
+    tokenRequiredRoutes.forEach(route => {
+      if (url.includes(route)) {
+        tokenRequired = true;
+      }
+    });
+    return tokenRequired;
   }
 
   private setAuthTimer(duration: number) {

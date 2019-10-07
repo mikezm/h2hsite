@@ -1,5 +1,10 @@
 
 interface Speaker {
+    name: string;
+    affiliation: string;
+}
+
+interface SpeakerResponse {
     speaker_name: string;
     affiliation: string;
 }
@@ -12,28 +17,37 @@ interface Paragraph {
 }
 
 interface Article {
-    title: string;
-    date: string;
-    speakers: Speaker;
+    headline: string;
+    date: Date;
+    speakers: Speaker[];
     tags: string[];
     info: string[];
     paragraphs: Paragraph[];
 }
 
 interface ArticleSummary {
-    title: string;
-    date: string;
-    speakers: Speaker;
+    headline: string;
+    date: Date;
+    speakers: Speaker[];
     tags: string[];
     info: string[];
 }
 
-interface ArticleSummaryResponse {
-    data: ArticleSummary[];
+interface ArticleResponse {
+    headline: string;
+    article_date: Date;
+    speakers: SpeakerResponse[];
+    tags: string[];
+    info: string[];
+    paragraphs: Paragraph[];
 }
 
-export {
-    Article,
-    ArticleSummary,
-    ArticleSummaryResponse
+interface ArticleSummaryReponse {
+    headline: string;
+    article_date: Date;
+    speakers: SpeakerResponse[];
+    tags: string[];
+    info: string[];
 }
+
+export { Article, ArticleSummary, ArticleResponse, ArticleSummaryReponse }

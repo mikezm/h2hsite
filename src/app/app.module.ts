@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,8 +12,7 @@ import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './error/error.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { ArticlesModule } from './article/articles.module';
+import { ArticleModule } from './article/article.module';
 
 @NgModule({
   declarations: [
@@ -22,11 +22,12 @@ import { ArticlesModule } from './article/articles.module';
   ],
   imports: [
     BrowserModule,
+    //FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
-    ArticlesModule
+    ArticleModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  margin-top: 1rem;
+}
+
+input {
+  width: 80%;
+}
+
+.info-text {
+  text-align: center;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+.speaker-name {
+  font-weight: bold;
+}
+
+.speaker-affiliation {
+  font-style: italic;
+}
+
+
+
+
+
